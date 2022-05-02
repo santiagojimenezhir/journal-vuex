@@ -1,8 +1,9 @@
 <template>
-  <div class="entry-title d-flex justify-content-between p-2">
+  <div class="entry-title d-flex justify-content-between p-2" v-if="entry">
     <div>
-      <span class="text-success fs-5 fw-bold">15</span><span class="mx-1 fs-5">Julio</span
-      ><span class="mx-2 fw-light">2021</span>
+      <span class="text-success fs-5 fw-bold">{{ day }}</span
+      ><span class="mx-1 fs-5">{{ month }}</span
+      ><span class="mx-2 fw-light">{{ yearDate }}</span>
     </div>
     <div>
       <button class="btn btn-danger m-1">
@@ -17,8 +18,13 @@
   </div>
 
   <hr />
-  <div class="d-flex flex-column px-3 h75">
-    <textarea cols="10" rows="5" placeholder="¿Que sucedió hoy?"></textarea>
+  <div class="d-flex flex-column px-3 h75" v-if="entry">
+    <textarea
+      cols="10"
+      rows="5"
+      placeholder="¿Que sucedió hoy?"
+      v-model="entry.text"
+    ></textarea>
   </div>
   <Fab icon="fa-save"></Fab>
   <img
@@ -31,9 +37,53 @@
 
 <script>
 import { defineAsyncComponent } from "vue";
+import { mapGetters } from "vuex";
+import getDayMonthYear from "../helpers/getDayMonthYear";
 export default {
   components: {
     Fab: defineAsyncComponent(() => import("../components/Fab.vue")),
+  },
+  props: {
+    id: {
+      type: String,
+      require: true,
+    },
+  },
+  data() {
+    return {
+      entry: null,
+    };
+  },
+  watch: {
+    id(value, oldValue) {
+      console.log(value, oldValue);
+      this.loadEntry();
+    },
+  },
+  created() {
+    this.loadEntry();
+  },
+  methods: {
+    loadEntry() {
+      const entry = this.getEntryById(this.id);
+      if (!entry) return this.$router.push({ name: "no-entry" });
+      this.entry = entry;
+    },
+  },
+  computed: {
+    ...mapGetters("journal", ["getEntryById"]),
+    day() {
+      const { day } = getDayMonthYear(this.entry.date);
+      return day;
+    },
+    month() {
+      const { month } = getDayMonthYear(this.entry.date);
+      return month;
+    },
+    yearDate() {
+      const { yearDay } = getDayMonthYear(this.entry.date);
+      return yearDay;
+    },
   },
 };
 </script>

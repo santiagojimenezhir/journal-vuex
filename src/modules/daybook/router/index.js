@@ -22,6 +22,12 @@ export default {
                     /*wbpackChuckName: "entry" */
                     "@/modules/daybook/views/EntryView.vue"
                 ),
+            /**Enviar id por medio del router al cargar la entrada  */
+            props: (route) => {
+                return {
+                    id: route.params.id,
+                };
+            },
         },
     ],
 };
