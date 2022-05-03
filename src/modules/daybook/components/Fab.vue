@@ -1,6 +1,6 @@
 <template>
   <button class="btn btn-primary">
-    <i class="fa fa-2x" :class="icon"></i>
+    <i class="fa fa-2x" :class="icon" @click="$emit('SaveEntry')"></i>
   </button>
 </template>
 <script>
