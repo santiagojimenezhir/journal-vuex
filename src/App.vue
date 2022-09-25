@@ -1,11 +1,19 @@
 <template>
-  <!-- <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div> -->
-  <router-view />
+  <h1 v-if="authStatus === 'authenticating'">{{ authStatus }}</h1>
+  <router-view v-else />
 </template>
-
+<script>
+import useAuth from "./modules/auth/hooks/useAuth";
+export default {
+  setup() {
+    const { authStatus, checkAuthStatus } = useAuth();
+    checkAuthStatus();
+    return {
+      authStatus,
+    };
+  },
+};
+</script>
 <style lang="scss">
 @import "@/styles/styles.scss";
 #app {

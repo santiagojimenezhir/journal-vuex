@@ -22,6 +22,9 @@ export const deleteEntry = (state, id) => {
      */
     state.entries = state.entries.filter((entry) => entry.id !== id); // Arreglo ya sin la entrada que eliminamos
 };
+export const clearEntries = (state) => {
+    state.entries = [];
+};
 
 /**
  * Cuando la base resuleva paso a mutations
